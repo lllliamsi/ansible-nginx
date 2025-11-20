@@ -42,8 +42,6 @@ pipeline {
                         sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
                         sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
                         sed -i 's/^Include /etc/ssh/sshd_config.d/*.conf/#Include /etc/ssh/sshd_config.d/*.conf/' /etc/ssh/sshd_config && \
-                        cat /etc/ssh/sshd_config && \
-                        cat /etc/ssh/sshd_config.d/*.conf && \
                         service ssh restart
                     "
         
@@ -73,7 +71,7 @@ pipeline {
                     ssh-keygen -f "/var/jenkins_home/.ssh/known_hosts" -R "$CONTAINER_IP" || true
         
                     # jalankan ansible playbook
-                    ansible-playbook playbooks/install-nginx.yaml --check -i inventory/dummy
+                    ansible-playbook playbooks/install-nginx.yaml --check -i inventory/dummy -vvv
                 '''
             }
         }
