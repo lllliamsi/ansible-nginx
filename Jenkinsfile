@@ -39,14 +39,14 @@ pipeline {
                         apt-get install -y openssh-server python3 sudo &&
                         mkdir -p /var/run/sshd &&
                         echo 'root:root' | chpasswd &&
-                        sed -i \"s/^PermitRootLogin prohibit-password/PermitRootLogin yes/\" /etc/ssh/sshd_config &&
-                        sed -i \"s/^#PasswordAuthentication yes/PasswordAuthentication yes/\" /etc/ssh/sshd_config &&
-                        sed -i \"/^Include .*sshd_config.d/d\" /etc/ssh/sshd_config ||
-                        true &&
+                    
+                        sed -i \"s|^PermitRootLogin prohibit-password|PermitRootLogin yes|\" /etc/ssh/sshd_config &&
+                        sed -i \"s|^#PasswordAuthentication yes|PasswordAuthentication yes|\" /etc/ssh/sshd_config &&
+                        sed -i \"/^Include .*sshd_config.d/d\" /etc/ssh/sshd_config || true &&
+                    
                         service ssh restart
                     "
 
-        
                     # beri waktu SSH ready
                     sleep 3
         
