@@ -40,9 +40,9 @@ pipeline {
                         apt-get install -y openssh-server python3 sudo &&
                         mkdir -p /var/run/sshd &&
                         echo "root:root" | chpasswd &&
-                        sed -i "s/^PermitRootLogin.*/PermitRootLogin yes/" /etc/ssh/sshd_config &&
-                        sed -i "s/^#PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config &&
-                        sed -i "s|^Include /etc/ssh/sshd_config.d/.*\\.conf|#&|" /etc/ssh/sshd_config &&
+                        sed -i "/^PermitRootLogin.*/PermitRootLogin yes/" /etc/ssh/sshd_config &&
+                        sed -i "/^#PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config &&
+                        sed -i "|^Include /etc/ssh/sshd_config.d/.*\\.conf|#&|" /etc/ssh/sshd_config &&
                          
                         service ssh restart
                     '
