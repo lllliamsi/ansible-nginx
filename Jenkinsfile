@@ -34,17 +34,17 @@ pipeline {
                     docker run -d --name ansible-test --rm ubuntu:22.04 tail -f /dev/null
         
                     echo "Installing dependencies and setting up SSH..."
-                    docker exec ansible-test bash -c '
-                        apt-get update &&
-                        apt-get install -y openssh-server python3 sudo &&
-                        mkdir -p /var/run/sshd &&
-                        echo "root:root" | chpasswd &&
-                        sed -i "s/^PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config &&
-                        sed -i "s/^#PasswordAuthentication yes/PasswordAuthentication yes/" /etc/ssh/sshd_config &&
-                        sed -i '\''|^Include /etc/ssh/sshd_config.d/.*\.conf|d'\'' /etc/ssh/sshd_config &&
-                        cat /etc/ssh/sshd_config &&
+                    docker exec ansible-test bash -c "
+                        apt-get update && \
+                        apt-get install -y openssh-server python3 sudo && \
+                        mkdir -p /var/run/sshd && \
+                        echo 'root:root' | chpasswd && \
+                        sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+                        sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+                        sed -i '/^Include \/etc\/ssh\/sshd_config.d\/.*.conf/d' /etc/ssh/sshd_config && \
+                        cat /etc/ssh/sshd_config && \
                         service ssh restart
-                    '
+                    "
         
                     # beri waktu SSH ready
                     sleep 3
