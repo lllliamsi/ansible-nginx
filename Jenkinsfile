@@ -35,12 +35,21 @@ pipeline {
         
                     echo "Installing dependencies and setting up SSH..."
                     docker exec ansible-test bash -c "
+                        # Update & install dependencies
                         apt-get update && \
                         apt-get install -y openssh-server python3 sudo && \
+
+                        # Update & install dependencies
                         mkdir -p /var/run/sshd && \
                         echo 'root:root' | chpasswd && \
                         sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+                        sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+
+                        # Start SSH daemon
                         service ssh start
+
+                        # Optional: tunggu sebentar supaya SSH siap
+                        sleep 5
                     "
         
                     # beri waktu SSH ready
