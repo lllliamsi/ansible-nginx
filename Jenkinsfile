@@ -43,8 +43,8 @@ pipeline {
                         sed -i "/^PermitRootLogin.*/PermitRootLogin yes/" /etc/ssh/sshd_config &&
                         sed -i "/^#PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config &&
                         sed -i "|^Include /etc/ssh/sshd_config.d/.*\\.conf|#&|" /etc/ssh/sshd_config &&
-                        service ssh restart || true
-                    '
+                        service ssh restart
+                    ' || true
 
                     # beri waktu SSH ready
                     sleep 3
