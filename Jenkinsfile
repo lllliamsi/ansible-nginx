@@ -44,6 +44,7 @@ pipeline {
                         echo 'root:root' | chpasswd && \
                         sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
                         sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+                        sed -i 's/^Include/#Include/' /etc/ssh/sshd_config
 
                         # Start SSH daemon
                         service ssh start
