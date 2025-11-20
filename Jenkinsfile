@@ -35,14 +35,15 @@ pipeline {
         
                     echo "Installing dependencies and setting up SSH..."
                     docker exec ansible-test bash -c "
-                      apt-get update && apt-get install -y openssh-server python3 sudo && \
-                      mkdir -p /root/.ssh && \
-                      ssh-keygen -t ed25519 -f /root/.ssh/id_ed25519 -N '' && \
-                      cat /root/.ssh/id_ed25519.pub >> /root/.ssh/authorized_keys && \
-                      chmod 600 /root/.ssh/authorized_keys
+                        apt-get update && \
+                        apt-get install -y openssh-server python3 sudo && \
+                        mkdir -p /var/run/sshd && \
+                        echo 'root:root' | chpasswd && \
+                        sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+                        sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+                        service ssh restart
                     "
-                    docker exec ansible-test service ssh restart
-
+        
                     # beri waktu SSH ready
                     sleep 3
         
@@ -52,7 +53,7 @@ pipeline {
                     # buat inventory dummy
                     mkdir -p inventory
                     echo "[dummy]" > inventory/dummy
-                    echo "$CONTAINER_IP ansible_user=root ansible_ssh_private_key_file=/root/.ssh/id_ed25519 ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/dummy
+                    echo "$CONTAINER_IP ansible_user=root ansible_password=root ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/dummy
                 '''
             }
         }
