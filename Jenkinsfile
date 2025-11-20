@@ -42,8 +42,7 @@ pipeline {
                         echo "root:root" | chpasswd &&
                         sed -i "/^PermitRootLogin.*/PermitRootLogin yes/" /etc/ssh/sshd_config &&
                         sed -i "/^#PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config &&
-                        sed -i "|^Include /etc/ssh/sshd_config.d/.*\\.conf|#&|" /etc/ssh/sshd_config &&
-                        || true &&
+                        sed -i "|^Include /etc/ssh/sshd_config.d/.*\\.conf|#&|" /etc/ssh/sshd_config || true &&
                         service ssh restart
                     '
 
