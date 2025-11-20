@@ -9,14 +9,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                    curl -fsSL https://get.docker.com | bash
-                '''
-            }
-        }
-
         stage('Lint Playbook') {
             steps {
                 sh '''
