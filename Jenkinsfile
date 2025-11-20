@@ -62,7 +62,13 @@ pipeline {
             steps {
                 sh '''
                     echo "Running playbook in check mode against dummy container..."
+                    # ambil IP dari inventory dummy
+                    CONTAINER_IP=$(awk 'NR==2 {print $1}' inventory/dummy)
+        
+                    # hapus host lama dari known_hosts
                     ssh-keygen -f "/var/jenkins_home/.ssh/known_hosts" -R "$CONTAINER_IP" || true
+        
+                    # jalankan ansible playbook
                     ansible-playbook playbooks/install-nginx.yaml --check -i inventory/dummy
                 '''
             }
