@@ -12,7 +12,6 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    apt-get update
                     curl -fsSL https://get.docker.com | bash
                 '''
             }
