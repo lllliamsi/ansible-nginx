@@ -13,7 +13,7 @@ pipeline {
             steps {
                 sh '''
                     apt-get update
-                    apt-get install -y ansible ansible-lint docker.io
+                    curl -fsSL https://get.docker.com | bash
                 '''
             }
         }
