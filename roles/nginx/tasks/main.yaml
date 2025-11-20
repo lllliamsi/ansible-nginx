@@ -1,12 +1,16 @@
 ---
-- name: Install NGINX package
-  apt:
-    name: nginx
-    state: present
-    update_cache: true
+- name: Install and start NGINX
+  hosts: all
+  become: true
+  tasks:
+    - name: Install NGINX package
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
 
-- name: Ensure NGINX is running
-  service:
-    name: nginx
-    state: started
-    enabled: true
+    - name: Ensure NGINX is running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
