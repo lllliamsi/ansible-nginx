@@ -52,7 +52,7 @@ pipeline {
                     # buat inventory dummy
                     mkdir -p inventory
                     echo "[dummy]" > inventory/dummy
-                    echo \"$CONTAINER_IP ansible_user=root ansible_password=root ansible_ssh_common_args='-o StrictHostKeyChecking=no'\" >> inventory/dummy
+                    echo "$CONTAINER_IP ansible_user=root ansible_ssh_private_key_file=/var/jenkins_home/.ssh/id_ed25519 ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/dummy
                 '''
             }
         }
