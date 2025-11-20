@@ -32,20 +32,30 @@ pipeline {
                 sh '''
                     echo "Creating dummy container for simulation..."
                     docker run -d --name ansible-test --rm ubuntu:22.04 tail -f /dev/null
-
-                    # copy SSH key or use docker exec to install sshd
-                    docker exec ansible-test apt-get update
-                    docker exec ansible-test apt-get install -y openssh-server python3
-
-                    # enable ssh
-                    docker exec ansible-test service ssh start
-
-                    # get container IP
+        
+                    echo "Installing dependencies and setting up SSH..."
+                    docker exec ansible-test bash -c "
+                        apt-get update && \
+                        apt-get install -y openssh-server python3 sudo && \
+                        mkdir -p /var/run/sshd && \
+                        echo 'root:root' | chpasswd && \
+                        service ssh start
+                    "
+        
+                    # beri waktu SSH ready
+                    sleep 3
+        
+                    # ambil IP container
                     CONTAINER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ansible-test)
-                    echo "[dummy]\n$CONTAINER_IP ansible_user=root ansible_password=root ansible_ssh_common_args='-o StrictHostKeyChecking=no'" > inventory/dummy
+        
+                    # buat inventory dummy
+                    mkdir -p inventory
+                    echo "[dummy]" > inventory/dummy
+                    echo \"$CONTAINER_IP ansible_user=root ansible_password=root ansible_ssh_common_args='-o StrictHostKeyChecking=no'\" >> inventory/dummy
                 '''
             }
         }
+
 
         stage('Dry Run (Check Mode)') {
             steps {
