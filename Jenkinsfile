@@ -61,6 +61,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Running playbook in check mode against dummy container..."
+                    ssh-keygen -f "/var/jenkins_home/.ssh/known_hosts" -R "$CONTAINER_IP" || true
                     ansible-playbook playbooks/install-nginx.yaml --check -i inventory/dummy
                 '''
             }
