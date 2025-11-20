@@ -12,8 +12,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    sudo apt-get update
-                    sudo apt-get install -y ansible ansible-lint docker.io
+                    apt-get update
+                    apt-get install -y ansible ansible-lint docker.io
                 '''
             }
         }
