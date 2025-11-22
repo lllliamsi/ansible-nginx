@@ -27,21 +27,35 @@ pipeline {
             }
         }
 
-        stage('Run Ansible in Container') {
+        stage('Debug') {
             steps {
                 sh '''
-                    docker run --rm \
-                        -v ${WORKSPACE}:/ansible \
-                        -w /ansible \
-                        ubuntu:22.04 bash -c "
-                            apt-get update &&
-                            apt-get install -y ansible &&
-                            ansible-playbook playbooks/install-nginx.yaml --check -i inventory/local
-                        "
+                    echo "PWD: $(pwd)"
+                    echo "List root:"
+                    ls -lah
+                    echo "List playbooks:"
+                    ls -lah playbooks || echo "Playbooks missing!"
+                    echo "List inventory:"
+                    ls -lah inventory || echo "Inventory missing!"
                 '''
             }
         }
 
+        stage('Run Ansible in Container') {
+            steps {
+                sh """
+                    echo "WORKSPACE = $WORKSPACE"
+                    docker run --rm \
+                        -v "$WORKSPACE:/ansible" \
+                        -w /ansible \
+                        ubuntu:22.04 bash -c '
+                            apt-get update &&
+                            DEBIAN_FRONTEND=noninteractive apt-get install -y ansible &&
+                            ansible-playbook playbooks/install-nginx.yaml --check -i inventory/local
+                        '
+                """
+            }
+        }
     }
 
     post {
