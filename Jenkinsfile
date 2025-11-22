@@ -27,16 +27,6 @@ pipeline {
             }
         }
 
-        stage('Start Dummy Target') {
-            steps {
-                sh '''
-                docker run -d --name ansible-test \
-                    -p 2222:22 \
-                    dummy-ansible
-                '''
-            }
-        }
-
         stage('Check Mode') {
             steps {
                 sh '''
@@ -50,7 +40,6 @@ pipeline {
 
     post {
         always {
-            sh "docker rm -f ansible-test || true"
             echo "Pipeline completed."
         }
     }
