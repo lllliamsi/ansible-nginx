@@ -1,2 +1,2 @@
 [dummy]
-127.0.0.1 ansible_port=2222 ansible_user=ansible ansible_ssh_private_key_file=/home/jenkins_home/.ssh/id_rsa
+127.0.0.1 ansible_port=2222 ansible_user=ansible ansible_ssh_private_key_file=/var/jenkins_home/workspace/validasi-ansible/dummy-docker/id_rsa
