@@ -27,20 +27,19 @@ pipeline {
             }
         }
 
-        stage('Run Playbook in Dummy Container') {
+        stage('Run Ansible in Container') {
             steps {
-                sh '''
-                    echo "Running playbook in check mode inside dummy container..."
-
+                sh """
                     docker run --rm \
-                        -v $PWD:/ansible \
+                        -e DEBIAN_FRONTEND=noninteractive \
+                        -v ${WORKSPACE}:/ansible \
                         -w /ansible \
-                        ubuntu:22.04 bash -c "
+                        ubuntu:22.04 bash -c '
                             apt-get update &&
                             apt-get install -y ansible &&
-                            ansible-playbook playbooks/install-nginx.yaml --check -i inventory/local
-                        "
-                '''
+                            ansible-playbook /ansible/playbooks/install-nginx.yaml --check -i /ansible/inventory/local
+                        '
+                """
             }
         }
     }
