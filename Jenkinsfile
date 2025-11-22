@@ -29,19 +29,19 @@ pipeline {
 
         stage('Run Ansible in Container') {
             steps {
-                sh """
+                sh '''
                     docker run --rm \
-                        -e DEBIAN_FRONTEND=noninteractive \
                         -v ${WORKSPACE}:/ansible \
                         -w /ansible \
-                        ubuntu:22.04 bash -c '
+                        ubuntu:22.04 bash -c "
                             apt-get update &&
                             apt-get install -y ansible &&
-                            ansible-playbook /ansible/playbooks/install-nginx.yaml --check -i /ansible/inventory/local
-                        '
-                """
+                            ansible-playbook playbooks/install-nginx.yaml --check -i inventory/local
+                        "
+                '''
             }
         }
+
     }
 
     post {
