@@ -51,7 +51,7 @@ pipeline {
                         ubuntu:22.04 bash -c '
                             apt-get update &&
                             DEBIAN_FRONTEND=noninteractive apt-get install -y ansible &&
-                            ansible-playbook playbooks/install-nginx.yaml --check -i inventory/local
+                            ansible-playbook playbooks/install-nginx.yaml --check -i inventory/dev
                         '
                 """
             }
