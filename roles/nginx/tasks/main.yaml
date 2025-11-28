@@ -10,3 +10,4 @@
     name: nginx
     state: started
     enabled: true
+  when: not ansible_check_mode
