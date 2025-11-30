@@ -20,10 +20,7 @@ pipeline {
 
         stage('Prepare Dummy Container') {
             steps {
-                sh '''
-                    echo "Building dummy container..."
-                    docker build -t ansible-dummy ./dummy
-        
+                sh '''        
                     echo "Starting dummy container..."
                     docker run -d --name ansible-dummy \
                         --privileged \
