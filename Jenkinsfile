@@ -18,6 +18,25 @@ pipeline {
             }
         }
 
+        stage('Prepare Dummy Container') {
+            steps {
+                sh '''
+                    echo "Building dummy container..."
+                    docker build -t ansible-dummy ./dummy
+        
+                    echo "Starting dummy container..."
+                    docker run -d --name ansible-dummy \
+                        --privileged \
+                        --network jenkins-net \
+                        -p 2222:22 \
+                        ansible-dummy:latest
+        
+                    echo "Waiting for SSH..."
+                    sleep 8
+                '''
+            }
+        }
+
         stage('Syntax Check') {
             steps {
                 sh '''
@@ -40,6 +59,10 @@ pipeline {
 
     post {
         always {
+            sh '''
+                echo "Cleaning dummy container..."
+                docker rm -f ansible-dummy || true
+            '''
             echo "Pipeline completed."
         }
     }
